@@ -1293,7 +1293,7 @@ static void Task_StartPlaying(u8 taskId)
 static void Task_AskKeepPlaying(u8 taskId)
 {
     DisplayYesNoMenuDefaultYes();
-    DrawStdWindowFrame(sTextWindowId, 0);
+    DrawStdWindowFrame(sTextWindowId, FALSE);
     AddTextPrinterParameterized(sTextWindowId, FONT_NORMAL, Roulette_Text_KeepPlaying, 0, 1, TEXT_SKIP_DRAW, 0);
     CopyWindowToVram(sTextWindowId, COPYWIN_FULL);
     DoYesNoFuncWithChoice(taskId, &sYesNoTable_KeepPlaying);
@@ -3401,7 +3401,7 @@ static void Task_DeclineMinBet(u8 taskId)
 {
     ClearStdWindowAndFrame(0, FALSE);
     HideCoinsWindow();
-    ScriptContext2_Disable();
+    UnlockPlayerFieldControls();
     DestroyTask(taskId);
 }
 
@@ -3413,7 +3413,7 @@ static void Task_NotEnoughForMinBet(u8 taskId)
         gSpecialVar_0x8004 = 1;
         HideCoinsWindow();
         ClearStdWindowAndFrame(0, TRUE);
-        ScriptContext2_Disable();
+        UnlockPlayerFieldControls();
         DestroyTask(taskId);
     }
 }
@@ -3475,7 +3475,7 @@ static void Task_PrintRouletteEntryMsg(u8 taskId)
 void PlayRoulette(void)
 {
     u8 taskId;
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     ShowCoinsWindow(GetCoins(), 1, 1);
     taskId = CreateTask(Task_PrintRouletteEntryMsg, 0);
     gTasks[taskId].tCoins = GetCoins();
